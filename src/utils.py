@@ -34,7 +34,15 @@ def download_and_save(url: str, file_type: Literal["exe", "zip", "zip/exe", "zip
     path = Path(path)
 
     # AMD drivers require a referer header to be set
-    with requests.get(url, stream=True, headers={"referer": urlparse(url).hostname}) as resp:
+    if ("sourceforge" in url or "geeks3d" in url):
+        headers = {}
+    else:
+        headers = {
+            "referer": urlparse(url).hostname,
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:138.0) Gecko/20100101 Firefox/138.0"
+        }
+
+    with requests.get(url, stream=True, headers=headers, allow_redirects=True) as resp:
         resp.raise_for_status()
         if "html" in resp.headers['content-type']:
             raise ValueError("The URL responsed a HTML page.")
@@ -75,4 +83,4 @@ def download_and_save(url: str, file_type: Literal["exe", "zip", "zip/exe", "zip
                 if rename_as:
                     fname = f"{rename_as}.{fname.split(".")[-1]}"
 
-                shutil.move(temp.name, path.joinpath(fname))
+                shutil.move(temp.name, path.joinpath(fname.strip("\"")))

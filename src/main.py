@@ -10,7 +10,7 @@ import url
 import utils
 
 CONFIG: dict[
-    Literal["display", "network", "miscellaneous"],
+    Literal["display", "network", "miscellaneous", "tool"],
     list[dict[Literal["path", "url", "type"], str | Callable[[Remote], str]]]
 ] = {
     "display": [
@@ -114,6 +114,32 @@ CONFIG: dict[
             "path": "Realtek HD Universal",
             "url": url.realtek_audio,
         },
+    ],
+    "tool": [
+        {
+            "path": "y-cruncher",
+            "url": url.y_cruncher
+        },
+        {
+            "path": "HWInfo",
+            "url": url.hwinfo
+        },
+        {
+            "path": "OCCT",
+            "url": url.occt
+        },
+        {
+            "path": "CrystalDiskMark",
+            "url": url.crystaldick_mark
+        },
+        {
+            "path": "FurMark",
+            "url": url.furmark
+        },
+        {
+            "path": "CrystalDiskinfo",
+            "url": url.crystaldick_info
+        }
     ]
 }
 
@@ -122,7 +148,7 @@ if __name__ == "__main__":
     OUTPUT_DIR = Path("drivers")
 
     shutil.rmtree(OUTPUT_DIR, ignore_errors=True)
-    for d in ("display", "network", "miscellaneous"):
+    for d in ("display", "network", "miscellaneous", "tool"):
         os.makedirs(OUTPUT_DIR.joinpath(d), exist_ok=True)
 
     with utils.get_browser() as browser:
@@ -138,4 +164,4 @@ if __name__ == "__main__":
                 except Exception as e:
                     print(f"Failed: {e}")
 
-    archive.zip("driver-pack.zip", "conf", str(OUTPUT_DIR), level=8)
+    archive.zip("driver-pack.zip", "conf", str(OUTPUT_DIR), level=9)

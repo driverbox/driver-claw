@@ -345,3 +345,82 @@ def realtek_8892ae_bluetooth(remote: webdriver.Remote) -> DriverFile:
         file_type="zip/exe",
         rename_as="mb_driver_3702_realtek8922"
     )
+
+
+def y_cruncher(remote: webdriver.Remote) -> DriverFile:
+    remote.get("https://www.numberworld.org/y-cruncher/#Download")
+
+    return DriverFile(
+        url=remote
+        .find_element(By.XPATH, "//table[contains(., 'Download Link')]//tr[contains(., 'Windows')]//a")
+        .get_attribute("href"),
+        file_type="zip/folder",
+        rename_as=None
+    )
+
+
+def hwinfo(remote: webdriver.Remote) -> DriverFile:
+    remote.get("https://www.hwinfo.com/download/")
+
+    return DriverFile(
+        url=remote
+        .find_element(By.XPATH,
+                      "//div[contains(@class, 'download') and contains(., 'Portable') and contains(., 'Windows')]"
+                      "//li[contains(., 'SAC ftp (SK)')]//a")
+        .get_attribute("href"),
+        file_type="zip/exe",
+        rename_as=None
+    )
+
+
+def occt(remote: webdriver.Remote) -> DriverFile:
+    return DriverFile(
+        url="https://www.ocbase.com/download/edition:Personal/os:Windows",
+        file_type="exe",
+        rename_as=None
+    )
+
+
+def furmark(remote: webdriver.Remote) -> DriverFile:
+    remote.get("https://www.geeks3d.com/furmark/downloads/")
+
+    remote.get(
+        remote
+        .find_element(By.XPATH, "//a[contains(., 'win64 - (ZIP)')]")
+        .get_attribute("href")
+    )
+
+    time.sleep(5)
+
+    return DriverFile(
+        url=remote.find_element(
+            By.XPATH, "//a[contains(., 'Geeks3D server')]").get_attribute("href"),
+        file_type="zip/folder",
+        rename_as=None
+    )
+
+
+def crystaldick_mark(remote: webdriver.Remote) -> DriverFile:
+    remote.get("https://sourceforge.net/projects/crystalmarkretro/files/")
+
+    version = remote.find_element(
+        By.XPATH, "//a[contains(., 'Download Latest Version')]").get_attribute("title").split(":")[0]
+
+    return DriverFile(
+        url=f"https://download.sourceforge.net/crystalmarkretro/{version}",
+        file_type="zip/exe",
+        rename_as=None
+    )
+
+
+def crystaldick_info(remote: webdriver.Remote) -> DriverFile:
+    remote.get("https://sourceforge.net/projects/crystaldiskinfo/files/")
+
+    version = remote.find_element(
+        By.XPATH, "//a[contains(., 'Download Latest Version')]").get_attribute("title").split(":")[0]
+
+    return DriverFile(
+        url=f"https://download.sourceforge.net/crystaldiskinfo/{version}",
+        file_type="exe",
+        rename_as=None
+    )
