@@ -148,7 +148,7 @@ if __name__ == "__main__":
     OUTPUT_DIR = Path("drivers")
 
     shutil.rmtree(OUTPUT_DIR, ignore_errors=True)
-    for d in ("display", "network", "miscellaneous", "tool"):
+    for d in CONFIG.keys():
         os.makedirs(OUTPUT_DIR.joinpath(d), exist_ok=True)
 
     with utils.get_browser() as browser:
