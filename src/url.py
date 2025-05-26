@@ -6,6 +6,19 @@ from selenium.webdriver.common.by import By
 
 
 class DriverFile(NamedTuple):
+    """A named tuple representing a driver file(s) URL and its properties.
+
+    Attributes:
+        url (str): The download URL for the driver
+        file_type (Literal["exe", "zip", "zip/folder", "zip/exe"]): The type of file to be downloaded
+            "exe": Executable file
+            "zip": Zip archive
+            "zip/folder": Zip archive containing a folder
+            "zip/exe": Zip archive containing an executable
+        rename_as (str | None): Optional new filename to rename the downloaded file to.
+            If None, keeps original filename.
+    """
+
     url: str
     file_type: Literal["exe", "zip", "zip/folder", "zip/exe"]
     rename_as: str | None
