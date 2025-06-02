@@ -1,162 +1,85 @@
+import argparse
 import os
 import shutil
+import sys
 from pathlib import Path
-from typing import Callable, Literal
-
-from selenium.webdriver import Remote
 
 import archive
-import url
+import config
 import utils
 
-CONFIG: dict[
-    Literal["display", "network", "miscellaneous", "tool"],
-    list[dict[Literal["path", "url", "type"], str | Callable[[Remote], str]]]
-] = {
-    "display": [
-        {
-            "path": "AMD",
-            "url": url.amd_display,
-        },
-        {
-            "path": "Intel® Arc™ & Iris® Xe Graphics",
-            "url": url.intel_display_arc,
-        },
-        {
-            "path": "Intel® 7th-10th Gen Processor Graphics",
-            "url": url.intel_display_uhd,
-        },
-        {
-            "path": "Nvidia",
-            "url": url.nvidia_display_game,
-        }
-    ],
-    "network": [
-        {
-            "path": "Intel® Ethernet Adapter Complete Driver Pack",
-            "url": url.intel_lan,
-        },
-        {
-            "path": "Realtek",
-            "url": url.realtek_lan,
-        },
-    ],
-    "miscellaneous": [
-        {
-            "path": "AMD Chipset",
-            "url": url.amd_chipset,
-        },
-        {
-            "path": "Intel Chipset (INF Utility)",
-            "url": url.intel_inf_utility,
-        },
-        {
-            "path": "Intel® PPM",
-            "url": url.intel_ppm,
-        },
-        {
-            "path": "Intel® Wireless",
-            "url": url.intel_wifi,
-        },
-        {
-            "path": "Intel® Wireless",
-            "url": url.intel_bluetooth,
-        },
-        {
-            "path": "MediaTek MT7952_7927\\WIFI",
-            "url": url.mediatek_7927_wifi,
-        },
-        {
-            "path": "MediaTek MT7952_7927\\Bluetooth",
-            "url": url.mediatek_7927_bluetooth,
-        },
-        {
-            "path": "MediaTek MT7961_79X2\\WIFI",
-            "url": url.mediatek_7922_wifi,
-        },
-        {
-            "path": "MediaTek MT7961_79X2\\Bluetooth",
-            "url": url.mediatek_7922_bluetooth,
-        },
-        {
-            "path": "Qualcomm NCM865\\WIFI",
-            "url": url.qualcomm_ncm865_wifi,
-        },
-        {
-            "path": "Qualcomm NCM865\\Bluetooth",
-            "url": url.qualcomm_ncm865_bluetooth,
-        },
-        {
-            "path": "Realtek RTL8852BE\\WIFI",
-            "url": url.realtek_8852be_wifi,
-        },
-        {
-            "path": "Realtek RTL8852BE\\Bluetooth",
-            "url": url.realtek_8852be_bluetooth,
-        },
-        {
-            "path": "Realtek RTL8852CE\\WIFI",
-            "url": url.realtek_8852ce_wifi,
-        },
-        {
-            "path": "Realtek RTL8852CE\\Bluetooth",
-            "url": url.realtek_8852ce_bluetooth,
-        },
-        {
-            "path": "Realtek RTL8892AE\\WIFI",
-            "url": url.realtek_8892ae_wifi,
-        },
-        {
-            "path": "Realtek RTL8892AE\\Bluetooth",
-            "url": url.realtek_8892ae_bluetooth,
-        },
-        {
-            "path": "Realtek HD Universal",
-            "url": url.realtek_audio,
-        },
-    ],
-    "tool": [
-        {
-            "path": "y-cruncher",
-            "url": url.y_cruncher
-        },
-        {
-            "path": "HWInfo",
-            "url": url.hwinfo
-        },
-        {
-            "path": "OCCT",
-            "url": url.occt
-        },
-        {
-            "path": "CrystalDiskMark",
-            "url": url.crystaldick_mark
-        },
-        {
-            "path": "FurMark",
-            "url": url.furmark
-        },
-        {
-            "path": "CrystalDiskinfo",
-            "url": url.crystaldick_info
-        }
-    ]
-}
-
-
 if __name__ == "__main__":
-    OUTPUT_DIR = Path("drivers")
+    parser = argparse.ArgumentParser(
+        description="Download and package drivers and tools.")
+    parser.add_argument(
+        "-o",
+        "--output-dir",
+        type=str,
+        default="drivers",
+        help="Output directory for downloaded drivers (default: drivers)"
+    )
+    parser.add_argument(
+        "-e",
+        "--error-handling",
+        choices=["exit", "ignore", "log"],
+        default="ignore",
+        help="How to handle download errors: exit (stop on error), ignore (continue), log (log failures and continue)"
+    )
+    parser.add_argument(
+        "-r",
+        "--retry-failed",
+        action="store_true",
+        help="Retry only the failed downloads from the previous run"
+    )
+    parser.add_argument(
+        "-x",
+        "--no-archive",
+        action="store_true",
+        help="Do not create a zip archive of the downloaded files"
+    )
+    parser.add_argument(
+        "-n",
+        "--archive-name",
+        type=str,
+        default="driver-pack.zip",
+        help="Name of the output archive file (default: driver-pack.zip)"
+    )
+    parser.add_argument(
+        "-l",
+        "--compress-level",
+        type=int,
+        default=5,
+        choices=range(0, 10),
+        help="Compression level for the archive (0-9, default: 5)"
+    )
+    args = parser.parse_args()
 
-    shutil.rmtree(OUTPUT_DIR, ignore_errors=True)
-    for d in CONFIG.keys():
-        os.makedirs(OUTPUT_DIR.joinpath(d), exist_ok=True)
+    output_dir = Path(args.output_dir)
+    log_file = output_dir.joinpath("failed_downloads")
+    failed_downloads: dict[str, list] = {}
+
+    if args.retry_failed:
+        download_configs = utils.load_failed_downloads(log_file)
+        if not download_configs:
+            print("No failed downloads to retry.")
+            sys.exit(1)
+    else:
+        download_configs = config.BASE_CONFIG
+
+        if log_file.exists():
+            log_file.unlink()
+
+    if not args.retry_failed:
+        shutil.rmtree(output_dir, ignore_errors=True)
+        for d in download_configs.keys():
+            os.makedirs(output_dir.joinpath(d), exist_ok=True)
 
     with utils.get_browser() as browser:
-        for category, items in CONFIG.items():
+        for category, items in download_configs.items():
             for item in items:
                 print(f"Downloading [{category.title()}] {item['path']}...")
 
-                path = OUTPUT_DIR.joinpath(category, item["path"])
+                path = output_dir.joinpath(category, item["path"])
                 os.makedirs(path, exist_ok=True)
 
                 try:
@@ -164,4 +87,18 @@ if __name__ == "__main__":
                 except Exception as e:
                     print(f"Failed: {e}")
 
-    archive.zip("driver-pack.zip", "conf", str(OUTPUT_DIR), level=9)
+                    if args.error_handling == "exit":
+                        sys.exit(1)
+                    elif args.error_handling == "log":
+                        failed_downloads.setdefault(category, [])
+                        failed_downloads[category].append(item)
+
+    if args.error_handling == "log" and failed_downloads:
+        utils.save_failed_downloads(log_file, failed_downloads)
+        print(f"Failed downloads logged to {log_file}.")
+
+    if len(failed_downloads) == 0 and not args.no_archive:
+        archive.zip(args.archive_name,
+                    "conf",
+                    str(output_dir),
+                    level=args.compress_level)

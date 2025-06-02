@@ -2,6 +2,7 @@ import contextlib
 import functools
 import glob
 import os
+import pickle
 import re
 import shutil
 import tempfile
@@ -14,6 +15,20 @@ from selenium import webdriver
 from tqdm.auto import tqdm
 
 import archive
+
+
+def load_failed_downloads(path: Path) -> dict[str, list]:
+    """Load failed downloads from a log file."""
+    if path.exists():
+        with open(path, 'rb') as f:
+            return pickle.load(f)
+    return []
+
+
+def save_failed_downloads(path: Path, failed: dict[str, list]) -> None:
+    """Save failed downloads to a log file."""
+    with open(path, 'wb') as f:
+        pickle.dump(failed, f)
 
 
 @contextlib.contextmanager
