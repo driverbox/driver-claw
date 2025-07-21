@@ -52,6 +52,14 @@ if __name__ == "__main__":
         choices=range(0, 10),
         help="Compression level for the archive (0-9, default: 5)"
     )
+    parser.add_argument(
+        "-f",
+        "--include-files",
+        type=str,
+        nargs="+",
+        action="extend",
+        help="File or directory name to include in the archive"
+    )
     args = parser.parse_args()
 
     output_dir = Path(args.output_dir)
@@ -65,9 +73,6 @@ if __name__ == "__main__":
             sys.exit(1)
     else:
         download_configs = config.BASE_CONFIG
-
-        if log_file.exists():
-            log_file.unlink()
 
     if not args.retry_failed:
         shutil.rmtree(output_dir, ignore_errors=True)
@@ -93,12 +98,13 @@ if __name__ == "__main__":
                         failed_downloads.setdefault(category, [])
                         failed_downloads[category].append(item)
 
+    log_file.unlink(True)
     if args.error_handling == "log" and failed_downloads:
         utils.save_failed_downloads(log_file, failed_downloads)
         print(f"Failed downloads logged to {log_file}.")
 
     if len(failed_downloads) == 0 and not args.no_archive:
         archive.zip(args.archive_name,
-                    "conf",
+                    *(args.include_files or []),
                     str(output_dir),
                     level=args.compress_level)
