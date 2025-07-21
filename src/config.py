@@ -66,6 +66,14 @@ BASE_CONFIG: dict[
             "url": url.mediatek_7927_bluetooth,
         },
         {
+            "path": "MediaTek MT7902\\WIFI",
+            "url": url.mediatek_7902_wifi,
+        },
+        {
+            "path": "MediaTek MT7902\\Bluetooth",
+            "url": url.mediatek_7902_bluetooth,
+        },
+        {
             "path": "MediaTek MT7961_79X2\\WIFI",
             "url": url.mediatek_7922_wifi,
         },

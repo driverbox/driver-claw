@@ -300,6 +300,28 @@ def mediatek_7922_bluetooth(remote: webdriver.Remote) -> DriverFile:
     )
 
 
+def mediatek_7902_wifi(remote: webdriver.Remote) -> DriverFile:
+    remote.get(
+        "https://www.gigabyte.com/hk/Motherboard/B850M-FORCE-WIFI6E/support#dl")
+
+    return DriverFile(
+        url=_gigabyte_driver(remote, "MediaTek Wi-Fi 6E WIFI Driver"),
+        file_type="zip/exe",
+        rename_as="mb_driver_4716_mtk6ewifi"
+    )
+
+
+def mediatek_7902_bluetooth(remote: webdriver.Remote) -> DriverFile:
+    remote.get(
+        "https://www.gigabyte.com/hk/Motherboard/B850M-FORCE-WIFI6E/support#dl")
+
+    return DriverFile(
+        url=_gigabyte_driver(remote, "MediaTek Wi-Fi 6E Bluetooth Driver"),
+        file_type="zip/exe",
+        rename_as="mb_driver_4717_mtk6e"
+    )
+
+
 def realtek_8852be_wifi(remote: webdriver.Remote) -> DriverFile:
     return DriverFile(
         url="https://dlcdnets.asus.com/pub/ASUS/mb/08WIRELESS/DRV_WiFi_RTK_8852BE_SZ-TSD_W11_64_V6001151240_20220908B.zip?model=PRIME%20B650M-A%20WIFI",
