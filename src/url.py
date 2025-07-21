@@ -73,7 +73,7 @@ def amd_chipset(remote: webdriver.Remote) -> DriverFile:
 
     return DriverFile(
         url=(remote
-             .find_element(By.XPATH, "//a[@alt='Download' and contains(@href, 'Chipset')]")
+             .find_element(By.XPATH, "//a[@alt='Download' and contains(@href, 'chipset')]")
              .get_attribute("href")),
         file_type="exe",
         rename_as="AMD_Chipset_Software"
