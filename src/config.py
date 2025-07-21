@@ -11,125 +11,117 @@ BASE_CONFIG: dict[
     "display": [
         {
             "path": "AMD",
-            "url": url.amd_display,
-        },
-        {
-            "path": "Intel® Arc™ & Iris® Xe Graphics",
-            "url": url.intel_display_arc,
+            "url": url.amd_display
         },
         {
             "path": "Intel® 7th-10th Gen Processor Graphics",
-            "url": url.intel_display_uhd,
+            "url": url.intel_display_uhd
+        },
+        {
+            "path": "Intel® Arc™ & Iris® Xe Graphics",
+            "url": url.intel_display_arc
         },
         {
             "path": "Nvidia",
-            "url": url.nvidia_display_game,
+            "url": url.nvidia_display_game
+        }
+    ],
+    "miscellaneous": [
+        {
+            "path": "AMD Chipset",
+            "url": url.amd_chipset
+        },
+        {
+            "path": "Intel Chipset (INF Utility)",
+            "url": url.intel_inf_utility
+        },
+        {
+            "path": "Intel® PPM",
+            "url": url.intel_ppm
+        },
+        {
+            "path": "Intel® Wireless",
+            "url": url.intel_wifi
+        },
+        {
+            "path": "Intel® Wireless",
+            "url": url.intel_bluetooth
+        },
+        {
+            "path": "MediaTek MT7902\\Bluetooth",
+            "url": url.mediatek_7902_bluetooth
+        },
+        {
+            "path": "MediaTek MT7902\\WIFI",
+            "url": url.mediatek_7902_wifi
+        },
+        {
+            "path": "MediaTek MT7952_7927\\Bluetooth",
+            "url": url.mediatek_7927_bluetooth
+        },
+        {
+            "path": "MediaTek MT7952_7927\\WIFI",
+            "url": url.mediatek_7927_wifi
+        },
+        {
+            "path": "MediaTek MT7961_79X2\\Bluetooth",
+            "url": url.mediatek_7922_bluetooth
+        },
+        {
+            "path": "MediaTek MT7961_79X2\\WIFI",
+            "url": url.mediatek_7922_wifi
+        },
+        {
+            "path": "Qualcomm NCM865\\Bluetooth",
+            "url": url.qualcomm_ncm865_bluetooth
+        },
+        {
+            "path": "Qualcomm NCM865\\WIFI",
+            "url": url.qualcomm_ncm865_wifi
+        },
+        {
+            "path": "Realtek HD Universal",
+            "url": url.realtek_audio
+        },
+        {
+            "path": "Realtek RTL8852BE\\Bluetooth",
+            "url": url.realtek_8852be_bluetooth
+        },
+        {
+            "path": "Realtek RTL8852BE\\WIFI",
+            "url": url.realtek_8852be_wifi
+        },
+        {
+            "path": "Realtek RTL8852CE\\Bluetooth",
+            "url": url.realtek_8852ce_bluetooth
+        },
+        {
+            "path": "Realtek RTL8852CE\\WIFI",
+            "url": url.realtek_8852ce_wifi
+        },
+        {
+            "path": "Realtek RTL8892AE\\Bluetooth",
+            "url": url.realtek_8892ae_bluetooth
+        },
+        {
+            "path": "Realtek RTL8892AE\\WIFI",
+            "url": url.realtek_8892ae_wifi
         }
     ],
     "network": [
         {
             "path": "Intel® Ethernet Adapter Complete Driver Pack",
-            "url": url.intel_lan,
+            "url": url.intel_lan
         },
         {
             "path": "Realtek",
-            "url": url.realtek_lan,
-        },
-    ],
-    "miscellaneous": [
-        {
-            "path": "AMD Chipset",
-            "url": url.amd_chipset,
-        },
-        {
-            "path": "Intel Chipset (INF Utility)",
-            "url": url.intel_inf_utility,
-        },
-        {
-            "path": "Intel® PPM",
-            "url": url.intel_ppm,
-        },
-        {
-            "path": "Intel® Wireless",
-            "url": url.intel_wifi,
-        },
-        {
-            "path": "Intel® Wireless",
-            "url": url.intel_bluetooth,
-        },
-        {
-            "path": "MediaTek MT7952_7927\\WIFI",
-            "url": url.mediatek_7927_wifi,
-        },
-        {
-            "path": "MediaTek MT7952_7927\\Bluetooth",
-            "url": url.mediatek_7927_bluetooth,
-        },
-        {
-            "path": "MediaTek MT7902\\WIFI",
-            "url": url.mediatek_7902_wifi,
-        },
-        {
-            "path": "MediaTek MT7902\\Bluetooth",
-            "url": url.mediatek_7902_bluetooth,
-        },
-        {
-            "path": "MediaTek MT7961_79X2\\WIFI",
-            "url": url.mediatek_7922_wifi,
-        },
-        {
-            "path": "MediaTek MT7961_79X2\\Bluetooth",
-            "url": url.mediatek_7922_bluetooth,
-        },
-        {
-            "path": "Qualcomm NCM865\\WIFI",
-            "url": url.qualcomm_ncm865_wifi,
-        },
-        {
-            "path": "Qualcomm NCM865\\Bluetooth",
-            "url": url.qualcomm_ncm865_bluetooth,
-        },
-        {
-            "path": "Realtek RTL8852BE\\WIFI",
-            "url": url.realtek_8852be_wifi,
-        },
-        {
-            "path": "Realtek RTL8852BE\\Bluetooth",
-            "url": url.realtek_8852be_bluetooth,
-        },
-        {
-            "path": "Realtek RTL8852CE\\WIFI",
-            "url": url.realtek_8852ce_wifi,
-        },
-        {
-            "path": "Realtek RTL8852CE\\Bluetooth",
-            "url": url.realtek_8852ce_bluetooth,
-        },
-        {
-            "path": "Realtek RTL8892AE\\WIFI",
-            "url": url.realtek_8892ae_wifi,
-        },
-        {
-            "path": "Realtek RTL8892AE\\Bluetooth",
-            "url": url.realtek_8892ae_bluetooth,
-        },
-        {
-            "path": "Realtek HD Universal",
-            "url": url.realtek_audio,
-        },
+            "url": url.realtek_lan
+        }
     ],
     "tool": [
         {
-            "path": "y-cruncher",
-            "url": url.y_cruncher
-        },
-        {
-            "path": "HWInfo",
-            "url": url.hwinfo
-        },
-        {
-            "path": "OCCT",
-            "url": url.occt
+            "path": "CrystalDiskinfo",
+            "url": url.crystaldick_info
         },
         {
             "path": "CrystalDiskMark",
@@ -140,8 +132,16 @@ BASE_CONFIG: dict[
             "url": url.furmark
         },
         {
-            "path": "CrystalDiskinfo",
-            "url": url.crystaldick_info
+            "path": "HWInfo",
+            "url": url.hwinfo
+        },
+        {
+            "path": "OCCT",
+            "url": url.occt
+        },
+        {
+            "path": "y-cruncher",
+            "url": url.y_cruncher
         }
     ]
 }
