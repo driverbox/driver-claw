@@ -179,7 +179,7 @@ def qualcomm_ncm865_wifi(remote: webdriver.Remote) -> DriverFile:
         remote.get(
             "https://www.gigabyte.com/PC-Accessory/GC-WIFI7/support#support-childModelsMenu")
 
-    time.sleep(1)
+    time.sleep(3)
 
     for anchor in remote.find_elements(By.XPATH, "//a[.//p[text()='GC-WIFI7 1.0']]"):
         if anchor.is_displayed():
@@ -204,7 +204,7 @@ def qualcomm_ncm865_bluetooth(remote: webdriver.Remote) -> DriverFile:
         remote.get(
             "https://www.gigabyte.com/PC-Accessory/GC-WIFI7/support#support-childModelsMenu")
 
-    time.sleep(1)
+    time.sleep(3)
 
     for anchor in remote.find_elements(By.XPATH, "//a[.//p[text()='GC-WIFI7 1.0']]"):
         if anchor.is_displayed():
@@ -231,7 +231,7 @@ def mediatek_7927_wifi(remote: webdriver.Remote) -> DriverFile:
         remote.get(
             "https://www.gigabyte.com/PC-Accessory/GC-WIFI7/support#support-childModelsMenu")
 
-    time.sleep(1)
+    time.sleep(3)
 
     for anchor in remote.find_elements(By.XPATH, "//a[.//p[text()='GC-WIFI7 1.1']]"):
         if anchor.is_displayed():
@@ -258,7 +258,7 @@ def mediatek_7927_bluetooth(remote: webdriver.Remote) -> DriverFile:
         remote.get(
             "https://www.gigabyte.com/PC-Accessory/GC-WIFI7/support#support-childModelsMenu")
 
-    time.sleep(1)
+    time.sleep(3)
 
     for anchor in remote.find_elements(By.XPATH, "//a[.//p[text()='GC-WIFI7 1.1']]"):
         if anchor.is_displayed():
