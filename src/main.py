@@ -22,7 +22,7 @@ if __name__ == "__main__":
         "-e",
         "--error-handling",
         choices=["exit", "ignore", "log"],
-        default="ignore",
+        default="log",
         help="How to handle download errors: exit (stop on error), ignore (continue), log (log failures and continue)"
     )
     parser.add_argument(
