@@ -2,7 +2,8 @@ import os
 
 import patoolib
 
-LIB7ZIP = patoolib.find_archive_program("7z", "unzip")
+LIB7ZIP = (os.getenv('PATH_LIB_7ZIP')
+           or patoolib.find_archive_program("7z", "unzip"))
 
 
 def unzip(source: os.PathLike, target: os.PathLike, silent: bool = True) -> int:
