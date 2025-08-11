@@ -2,11 +2,11 @@ import functools
 from typing import Literal
 
 import url
-from driver_scraper import ScrapeItem
+from driver_claw import ClawPrize
 
 BASE_CONFIG: dict[
     Literal['display', 'network', 'miscellaneous', 'tool'],
-    list[ScrapeItem]
+    list[ClawPrize]
 ] = {
     'display': [
         {

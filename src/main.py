@@ -5,7 +5,7 @@ from contextlib import contextmanager, redirect_stdout
 
 import archive
 import config
-from driver_scraper import DriverScraper
+from driver_claw import DriverClaw
 
 
 @contextmanager
@@ -92,9 +92,9 @@ if __name__ == '__main__':
                 shutil.rmtree(args.output_dir)
 
             try:
-                scraper = DriverScraper(args.output_dir)
-                failed = scraper.scrape(scraper.load_failed() if args.retry_failed else config.BASE_CONFIG,
-                                        args.error_handling)
+                claw = DriverClaw(args.output_dir)
+                failed = claw.start(claw.load_failed() if args.retry_failed else config.BASE_CONFIG,
+                                    args.error_handling)
             except FileNotFoundError:
                 print('Nothing to retry.')
                 exit(1)

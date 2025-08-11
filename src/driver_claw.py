@@ -7,7 +7,6 @@ import re
 import shutil
 import sys
 import tempfile
-import time
 from pathlib import Path
 from typing import Callable, Literal, TypedDict
 from urllib.parse import urlparse
@@ -34,14 +33,14 @@ def get_browser():
         driver.quit()
 
 
-class ScrapeItem(TypedDict):
+class ClawPrize(TypedDict):
     path: str
     url: str | Callable[[Remote], str]
     file_type: Literal["exe", "zip", "zip/folder", "zip/exe"]
     rename_as: str | None
 
 
-class DriverScraper:
+class DriverClaw:
 
     @property
     def path_error_log(self) -> Path:
@@ -54,7 +53,7 @@ class DriverScraper:
         with open(self.path_error_log, 'rb') as f:
             return pickle.load(f)
 
-    def scrape(self, targets: dict[str, list[ScrapeItem]], on_error: Literal['exit', 'log', 'ignore']):
+    def start(self, targets: dict[str, list[ClawPrize]], on_error: Literal['exit', 'log', 'ignore']):
         failed_downloads: dict[str, list] = {}
 
         with get_browser() as browser:
@@ -155,6 +154,6 @@ class DriverScraper:
 
                     shutil.move(temp.name, path.joinpath(fname.strip("\"")))
 
-    def _dump_failed(self, failed: dict[str, list[ScrapeItem]]):
+    def _dump_failed(self, failed: dict[str, list[ClawPrize]]):
         with open(self.path_error_log, 'wb') as f:
             return pickle.dump(failed, f)
