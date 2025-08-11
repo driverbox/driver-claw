@@ -19,7 +19,7 @@ def setup_print(silent: bool):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
-        description='Download and package drivers and tools.')
+        description='Find and download the latest common hardware drivers, and diagnostic tool.')
     parser.add_argument(
         '-o',
         '--output-dir',
