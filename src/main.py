@@ -30,12 +30,6 @@ if __name__ == '__main__':
         help='Retry only the failed downloads from the previous run'
     )
     parser.add_argument(
-        '-x',
-        '--no-archive',
-        action='store_true',
-        help='Do not create a zip archive of the downloaded files'
-    )
-    parser.add_argument(
         '-n',
         '--archive-name',
         type=str,
@@ -58,25 +52,51 @@ if __name__ == '__main__':
         action='extend',
         help='File or directory name to include in the archive'
     )
+
+    group_archive = parser.add_mutually_exclusive_group()
+    group_archive.add_argument(
+        '-a',
+        '--archive-only',
+        action='store_true',
+        help='Only create archive from existing output directory, skip scraping'
+    )
+    group_archive.add_argument(
+        '-x',
+        '--no-archive',
+        action='store_true',
+        help='Do not create a zip archive of the downloaded files'
+    )
+
     args = parser.parse_args()
 
-    if not args.retry_failed and os.path.exists(args.output_dir):
-        shutil.rmtree(args.output_dir)
+    if not args.archive_only:
+        if not args.retry_failed and os.path.exists(args.output_dir):
+            shutil.rmtree(args.output_dir)
 
-    try:
-        scraper = DriverScraper(args.output_dir)
-        failed = scraper.scrape(scraper.load_failed() if args.retry_failed else config.BASE_CONFIG,
-                                args.error_handling)
-    except FileNotFoundError:
-        print('Nothing to retry.')
+        try:
+            scraper = DriverScraper(args.output_dir)
+            failed = scraper.scrape(scraper.load_failed() if args.retry_failed else config.BASE_CONFIG,
+                                    args.error_handling)
+        except FileNotFoundError:
+            print('Nothing to retry.')
+            exit(1)
+
+        if len(failed) > 0:
+            print(f'Total of {len(failed)} download(s) failed.')
+            print('You may use -r/--retry-failed option to try again.')
+            exit(1)
+        if args.no_archive:
+            exit(0)
+
+    if not os.path.exists(args.output_dir):
+        print(
+            f"Error: Output directory '{args.output_dir}' does not exist.")
+        exit(1)
+    if not os.listdir(args.output_dir):
+        print(f"Error: Output directory '{args.output_dir}' is empty.")
         exit(1)
 
-    if len(failed) > 0:
-        print(f'Total of {len(failed)} download(s) failed.')
-        print('You may use -r/--retry-failed option to try again.')
-
-    if len(failed) == 0 and not args.no_archive:
-        archive.zip(args.archive_name,
-                    *(args.include_files or []),
-                    args.output_dir,
-                    level=args.compress_level)
+    archive.zip(args.archive_name,
+                *(args.include_files or []),
+                args.output_dir,
+                level=args.compress_level)
