@@ -7,6 +7,7 @@ import re
 import shutil
 import sys
 import tempfile
+import time
 from pathlib import Path
 from typing import Callable, Literal, TypedDict
 from urllib.parse import urlparse
@@ -118,12 +119,12 @@ class DriverScraper:
             resp.raw.read = functools.partial(
                 resp.raw.read, decode_content=True)
 
-            with (tqdm.wrapattr(resp.raw, "read", total=int(resp.headers.get('Content-Length', 0))) as content,
-                    tempfile.TemporaryFile(delete_on_close=False) as temp):
-                shutil.copyfileobj(content, temp)
+            with tempfile.TemporaryFile(delete_on_close=False) as temp:
+                with tqdm.wrapattr(resp.raw, "read", total=int(resp.headers.get('Content-Length', 0))) as content:
+                    shutil.copyfileobj(content, temp)
                 temp.close()
 
-                print("├ Organising...", flush=True)
+                print("├ Organising...")
                 if "zip" in file_type:
                     if (archive.unzip(temp.name, path) != 0):
                         raise RuntimeError("Failed to extract the zip file.")
