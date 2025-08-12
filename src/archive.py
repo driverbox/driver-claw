@@ -2,6 +2,7 @@
 """
 
 import os
+import subprocess
 
 import patoolib
 
@@ -20,7 +21,8 @@ def unzip(source: os.PathLike, target: os.PathLike, silent: bool = True) -> int:
     Returns:
         int: Exit code of the extraction process (0 for success).
     """
-    return os.system(f'"{LIB7ZIP}" x "{source}" -o"{target} {'> nul' if silent else ''}')
+    stream = subprocess.DEVNULL if silent else None
+    return subprocess.run([LIB7ZIP, 'x', source, f'-o{target}'], stdout=stream, stderr=stream).returncode
 
 
 def zip(target: os.PathLike, *source: os.PathLike, level: int = 5, silent: bool = True) -> int:
@@ -35,4 +37,5 @@ def zip(target: os.PathLike, *source: os.PathLike, level: int = 5, silent: bool 
     Returns:
         int: Exit code of the compression process (0 for success).
     """
-    return os.system(f'"{LIB7ZIP}" a "{target}" {" ".join(source)} -mx{level} {'> nul' if silent else ''}')
+    stream = subprocess.DEVNULL if silent else None
+    return subprocess.run([LIB7ZIP, 'a', target, " ".join(source), f'-mx{level}'], stdout=stream, stderr=stream).returncode
