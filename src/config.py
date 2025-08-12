@@ -13,15 +13,11 @@ FurMark, and HWInfo.
 
 
 import functools
-from typing import Literal
 
 import url
 from driver_claw import ClawPrize
 
-CLAW_PRIZES: dict[
-    Literal['display', 'network', 'miscellaneous', 'tool'],
-    list[ClawPrize]
-] = {
+CLAW_PRIZES: dict[str, list[ClawPrize]] = {
     'display': [
         {
             'path': 'AMD',
