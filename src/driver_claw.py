@@ -40,9 +40,13 @@ def get_browser():
 
 class ClawPrize(TypedDict):
     path: str
+    """Local file path where the downloaded or extracted file will be stored."""
     url: str | Callable[[Remote], str]
+    """URL to download the file, or a callable that generates the URL from a Remote object."""
     file_type: Literal['exe', 'zip', 'zip/folder', 'zip/exe']
+    """Type of the downloaded file, used to determine how it should be handled."""
     rename_as: str | None
+    """Optional new name for the executable after download or extraction."""
 
 
 class DriverClaw:
