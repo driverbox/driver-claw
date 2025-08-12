@@ -91,6 +91,30 @@ set "PATH_LIB_7ZIP=C:/<path-to-7zip>" && python src/main.py
 $env:PATH_LIB_7ZIP="C:/<path-to-7zip>"; python src/main.py
 ```
 
+### Customise Crawl Configurations
+
+The default claw configuration is located in `src/config.py`, which includes a curated list of common hardware drivers and diagnostic tools.
+To use a custom configuration file, specify it with the `-c` or `--claw-config` option. The tool accepts both JSON and Python source files.
+
+The module `src/url.py` provides helper methods to extract download URLs from well-known hardware manufacturers and vendors. You can leverage these utilities when drafting your own claw configuration.
+
+#### JSON file
+
+Refer to the [JSON Schema](https://raw.githubusercontent.com/markmybytes/driver-claw/main/claw-config-schema.json) for guidance on constructing a valid claw configuration.
+
+```sh
+python src/main.py -c ./custom-config.json
+```
+
+#### Python source file
+
+When using a Python file, driver-claw will look for a variable named `CLAW_CONFIG` defined in the specified source.
+Refer to the `DriverClaw` class for the expected structure and type details.
+
+```sh
+python src/main.py -c ./custom-config.py
+```
+
 ###  Including Extra Files in the Archive
 
 Use `-i` or `--include-files` to specify the file or directory paths you want to include in the output archive.
