@@ -1,3 +1,6 @@
+"""Handling archive operations using 7z.
+"""
+
 import os
 
 import patoolib
@@ -7,10 +10,29 @@ LIB7ZIP = (os.getenv('PATH_LIB_7ZIP')
 
 
 def unzip(source: os.PathLike, target: os.PathLike, silent: bool = True) -> int:
-    return os.system(f"{LIB7ZIP[:2]}\"{LIB7ZIP[2:]}\" x \"{source}\" -o\"{target}\""
-                     f"{"> nul" if silent else ""}")
+    """Extract a zip archive to the specified target directory.
+
+    Args:
+        source (os.PathLike): Path to the zip file.
+        target (os.PathLike): Directory to extract files to.
+        silent (bool): Suppress console output if True. Defaults to True.
+
+    Returns:
+        int: Exit code of the extraction process (0 for success).
+    """
+    return os.system(f'"{LIB7ZIP}" x "{source}" -o"{target} {'> nul' if silent else ''}')
 
 
 def zip(target: os.PathLike, *source: os.PathLike, level: int = 5, silent: bool = True) -> int:
-    return os.system(f"{LIB7ZIP[:2]}\"{LIB7ZIP[2:]}\" a \"{target}\" {" ".join(source)} "
-                     f"-mx{level} {"> nul" if silent else ""}")
+    """Create a zip archive from source files or directories.
+
+    Args:
+        target (os.PathLike): Path for the output zip file.
+        *source (os.PathLike): Paths to files or directories to archive.
+        level (int): Compression level (0-9). Defaults to 5.
+        silent (bool): Suppress console output if True. Defaults to True.
+
+    Returns:
+        int: Exit code of the compression process (0 for success).
+    """
+    return os.system(f'"{LIB7ZIP}" a "{target}" {" ".join(source)} -mx{level} {'> nul' if silent else ''}')

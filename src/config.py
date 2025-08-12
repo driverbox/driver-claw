@@ -1,3 +1,17 @@
+
+"""Configuration module for driver download targets.
+
+This module defines a structured dictionary `CLAW_PRIZES` that categorizes
+various hardware-related drivers and utilities into groups such as 'display',
+'network', 'miscellaneous', and 'tool'. Each entry specifies metadata for
+downloading and optionally renaming driver files, including:
+
+The configuration supports multiple vendors including AMD, Intel, Nvidia,
+Realtek, MediaTek, and Qualcomm, and includes utility tools like CrystalDiskInfo,
+FurMark, and HWInfo.
+"""
+
+
 import functools
 from typing import Literal
 
@@ -14,7 +28,7 @@ CLAW_PRIZES: dict[
             'url': functools.partial(
                     url.amd,
                     url='https://www.amd.com/en/support/downloads/drivers.html/graphics/radeon-rx/radeon-rx-9000-series/amd-radeon-rx-9070-xt.html',
-                    keyword='win10-win11'),
+                    dri_name='win10-win11'),
             'file_type': 'zip',
             'rename_as': None
         },
@@ -38,7 +52,7 @@ CLAW_PRIZES: dict[
         },
         {
             'path': 'Nvidia',
-            'url': functools.partial(url.nvidia_grd, type='desktop'),
+            'url': functools.partial(url.nvidia_grd, dri_type='desktop'),
             'file_type': 'zip',
             'rename_as': None
         }
@@ -49,7 +63,7 @@ CLAW_PRIZES: dict[
             'url': functools.partial(
                 url.amd,
                 url='https://www.amd.com/en/support/downloads/drivers.html/chipsets/am5/x870e.html',
-                keyword='chipset'),
+                dri_name='chipset'),
             'file_type': 'exe',
             'rename_as': 'AMD_Chipset_Software'
         },
@@ -114,7 +128,7 @@ CLAW_PRIZES: dict[
             'path': 'MediaTek MT7952_7927\\Bluetooth',
             'url': functools.partial(
                 url.gigabyte_wifi_card,
-                version='GC-WIFI7 1.1',
+                dri_type='GC-WIFI7 1.1',
                 dri_name='Bluetooth'
             ),
             'file_type': 'zip/exe',
@@ -124,7 +138,7 @@ CLAW_PRIZES: dict[
             'path': 'MediaTek MT7952_7927\\WIFI',
             'url': functools.partial(
                 url.gigabyte_wifi_card,
-                version='GC-WIFI7 1.1',
+                dri_type='GC-WIFI7 1.1',
                 dri_name='WIFI'
             ),
             'file_type': 'zip/exe',
@@ -134,7 +148,7 @@ CLAW_PRIZES: dict[
             'path': 'Qualcomm NCM865\\Bluetooth',
             'url': functools.partial(
                 url.gigabyte_wifi_card,
-                version='GC-WIFI7 1.0',
+                dri_type='GC-WIFI7 1.0',
                 dri_name='Bluetooth'
             ),
             'file_type': 'zip/exe',
@@ -144,7 +158,7 @@ CLAW_PRIZES: dict[
             'path': 'Qualcomm NCM865\\WIFI',
             'url': functools.partial(
                 url.gigabyte_wifi_card,
-                version='GC-WIFI7 1.0',
+                dri_type='GC-WIFI7 1.0',
                 dri_name='WIFI'
             ),
             'file_type': 'zip/exe',
@@ -240,7 +254,7 @@ CLAW_PRIZES: dict[
         {
             'path': 'CrystalDiskinfo',
             'url': url.crystaldick_info,
-            'file_type': 'exe',
+            'file_type': 'zip/exe',
             'rename_as': None
 
         },
