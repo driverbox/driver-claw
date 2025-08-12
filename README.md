@@ -35,7 +35,6 @@
 
 driver-claw is a Python-based command-line utility for downloading the latest PC hardware drivers and diagnostic tools. Leveraging Selenium, it automatically navigates official websites and motherboard manufacturers' pages to locate and retrieve the most up-to-date versions of essential drivers and utilities.
 
-This tool is also an accompanying tool for [driver-box](https://github.com/markmybytes/driver-box/), see [Usage](#usage) section for more.
 This tool also serves as a companion to [driver-box](https://github.com/markmybytes/driver-box/). Refer to the [Usage](#usage) section for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
