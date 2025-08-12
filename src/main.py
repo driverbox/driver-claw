@@ -91,6 +91,9 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     with setup_print(args.silent):
+        if archive.LIB7ZIP is None:
+            print('Unable to locate 7zip, falling back to system\'s built-in tools.')
+
         if not args.archive_only:
             if not args.retry_failed and os.path.exists(args.output_dir):
                 shutil.rmtree(args.output_dir)

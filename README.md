@@ -52,7 +52,7 @@ This tool also serves as a companion to [driver-box](https://github.com/markmyby
 ### Prerequisites
 
 - [Python](https://www.python.org/downloads/) >= 3.12
-- [7zip](https://www.7-zip.org/download.html)
+- [7zip](https://www.7-zip.org/download.html) (Optional)
 
 ### Setup
 
@@ -81,7 +81,12 @@ pip install -r requirements.txt
 
 ###  Specify 7-Zip Executable Location
 
-This tool uses 7-Zip to archive and extract files. If the 7-Zip executable is not available in the system's PATH, you can specify its location using the `PATH_LIB_7ZIP` environment variable.
+driver-claw uses 7-Zip to archive and extract files. If the 7-Zip executable is not available in the system's PATH, you can specify its location using the `PATH_LIB_7ZIP` environment variable.
+
+If 7-Zip cannot be found, the tool will fall back to using `PowerShell`. Please note:
+
+- Compression level will be lower compared to 7-Zip.
+- There could be a higher chance of failure when extracting certain downloaded archives (only support `.zip`).
 
 ```sh
 # CMD

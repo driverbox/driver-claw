@@ -1,4 +1,4 @@
-"""Handling archive operations using 7z.
+"""Handling archive operations.
 """
 
 import os
@@ -6,8 +6,14 @@ import subprocess
 
 import patoolib
 
-LIB7ZIP = (os.getenv('PATH_LIB_7ZIP')
-           or patoolib.find_archive_program("7z", "unzip"))
+try:
+    LIB7ZIP = (os.getenv('PATH_LIB_7ZIP')
+               or patoolib.find_archive_program("7z", "unzip"))
+
+    if not os.path.exists(LIB7ZIP):
+        raise FileNotFoundError
+except (patoolib.util.PatoolError, FileNotFoundError):
+    LIB7ZIP = None
 
 
 def unzip(source: os.PathLike, target: os.PathLike, silent: bool = True) -> int:
@@ -22,7 +28,10 @@ def unzip(source: os.PathLike, target: os.PathLike, silent: bool = True) -> int:
         int: Exit code of the extraction process (0 for success).
     """
     stream = subprocess.DEVNULL if silent else None
-    return subprocess.run([LIB7ZIP, 'x', source, f'-o{target}'], stdout=stream, stderr=stream).returncode
+    cmd = ([LIB7ZIP, 'x', str(source), f'-o{target}']
+           if LIB7ZIP
+           else ['powershell', 'Expand-Archive', '-Path', str(source), '-DestinationPath', f'"{target}"'])
+    return subprocess.run(cmd, stdout=stream, stderr=stream).returncode
 
 
 def zip(target: os.PathLike, *source: os.PathLike, level: int = 5, silent: bool = True) -> int:
@@ -38,4 +47,11 @@ def zip(target: os.PathLike, *source: os.PathLike, level: int = 5, silent: bool 
         int: Exit code of the compression process (0 for success).
     """
     stream = subprocess.DEVNULL if silent else None
-    return subprocess.run([LIB7ZIP, 'a', target, " ".join(source), f'-mx{level}'], stdout=stream, stderr=stream).returncode
+    cmd = ([LIB7ZIP, 'a', str(target), " ".join(source), f'-mx{level}']
+           if LIB7ZIP
+           else ['powershell', 'Compress-Archive', '-Path', ','.join(source),
+                 '-DestinationPath', str(target), '-CompressionLevel',
+                 'NoCompression' if level == 0 else 'Fastest' if level < 5 else 'Optimal',
+                 '-Force']
+           )
+    return subprocess.run(cmd, stdout=stream, stderr=stream).returncode
