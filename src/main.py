@@ -97,16 +97,16 @@ if __name__ == '__main__':
 
             claw = DriverClaw(args.output_dir)
 
-            if args.claw_config:
-                targets = (DriverClaw.load_json(args.claw_config)
-                           if '.json' in args.claw_config
-                           else DriverClaw.load_py(args.claw_config))
-            elif args.retry_failed:
+            if args.retry_failed:
                 try:
                     targets = claw.load_failed()
                 except FileNotFoundError:
                     print('No failed downloads to retry.')
                     exit(1)
+            elif args.claw_config:
+                targets = (DriverClaw.load_json(args.claw_config)
+                           if '.json' in args.claw_config
+                           else DriverClaw.load_py(args.claw_config))
             else:
                 targets = config.CLAW_PRIZES
 
