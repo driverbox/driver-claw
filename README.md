@@ -80,7 +80,33 @@ pip install -r requirements.txt
 <!-- USAGE EXAMPLES -->
 ## Usage
 
-<!-- TODO -->
+###  Specify 7-Zip Executable Location
+
+This tool uses 7-Zip to archive and extract files. If the 7-Zip executable is not available in the system's PATH, you can specify its location using the `PATH_LIB_7ZIP` environment variable.
+
+```sh
+# CMD
+set "PATH_LIB_7ZIP=C:/<path-to-7zip>" && python src/main.py
+
+# Powershell
+$env:PATH_LIB_7ZIP="C:/<path-to-7zip>"; python src/main.py
+```
+
+###  Including Extra Files in the Archive
+
+Use `-i` or `--include-files` to specify the file or directory paths you want to include in the output archive.
+To include multiple paths, either separate them with spaces or provide the option multiple times.
+
+```sh
+python src/main.py -i foo/ bar/ -i README.md
+```
+
+The `conf/` directory contains configuration files for the default set of drivers and tools used by driver-box.
+To use this tool to download drivers and utilities for driver-box, include the directory as input:
+
+```sh
+python src/main.py -i conf/
+```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
