@@ -56,7 +56,7 @@ if __name__ == '__main__':
         help='Compression level for the archive (0-9, default: 5)'
     )
     parser.add_argument(
-        '-f',
+        '-i',
         '--include-files',
         type=str,
         nargs='+',
