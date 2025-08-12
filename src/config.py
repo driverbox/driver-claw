@@ -4,7 +4,7 @@ from typing import Literal
 import url
 from driver_claw import ClawPrize
 
-BASE_CONFIG: dict[
+CLAW_PRIZES: dict[
     Literal['display', 'network', 'miscellaneous', 'tool'],
     list[ClawPrize]
 ] = {

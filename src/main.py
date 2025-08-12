@@ -2,6 +2,7 @@ import argparse
 import os
 import shutil
 from contextlib import contextmanager, redirect_stdout
+from typing import Iterable
 
 import archive
 import config
@@ -15,6 +16,14 @@ def setup_print(silent: bool):
             yield
     else:
         yield
+
+
+def file_ext(choices: Iterable[str], fname: str):
+    ext = os.path.splitext(fname)[1][1:].lower()
+    if ext not in choices:
+        raise argparse.ArgumentTypeError(
+            f'Invalid file extension: ".{ext}". Expected one of: {', '.join(choices)}.')
+    return fname
 
 
 if __name__ == '__main__':
@@ -69,6 +78,12 @@ if __name__ == '__main__':
         action='store_true',
         help='Suppress all output messages'
     )
+    parser.add_argument(
+        '-c',
+        '--claw-config',
+        type=lambda s: file_ext(('py', 'json'), s),
+        help='Path to the configuration file. Supports JSON (.json) or Python (.py) formats.'
+    )
 
     group_archive = parser.add_mutually_exclusive_group()
     group_archive.add_argument(
@@ -91,13 +106,22 @@ if __name__ == '__main__':
             if not args.retry_failed and os.path.exists(args.output_dir):
                 shutil.rmtree(args.output_dir)
 
-            try:
-                claw = DriverClaw(args.output_dir)
-                failed = claw.start(claw.load_failed() if args.retry_failed else config.BASE_CONFIG,
-                                    args.error_handling)
-            except FileNotFoundError:
-                print('Nothing to retry.')
-                exit(1)
+            claw = DriverClaw(args.output_dir)
+
+            if args.claw_config:
+                targets = (DriverClaw.load_json(args.claw_config)
+                           if '.json' in args.claw_config
+                           else DriverClaw.load_py(args.claw_config))
+            elif args.retry_failed:
+                try:
+                    targets = claw.load_failed()
+                except FileNotFoundError:
+                    print('Nothing to retry.')
+                    exit(1)
+            else:
+                targets = config.CLAW_PRIZES
+
+            failed = claw.start(targets, args.error_handling)
 
             if len(failed) > 0:
                 print(f'Total of {len(failed)} download(s) failed.')

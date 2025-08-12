@@ -1,6 +1,8 @@
 import contextlib
 import functools
 import glob
+import importlib.util
+import json
 import os
 import pickle
 import re
@@ -41,6 +43,18 @@ class ClawPrize(TypedDict):
 
 
 class DriverClaw:
+
+    @staticmethod
+    def load_json(path: str | Path) -> dict[str, list[ClawPrize]]:
+        with open(path) as f:
+            return json.load(f)
+
+    @staticmethod
+    def load_py(path: str | Path) -> dict[str, list[ClawPrize]]:
+        spec = importlib.util.spec_from_file_location("custom_config", path)
+        custom = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(custom)
+        return custom.CLAW_PRIZES
 
     @property
     def path_error_log(self) -> Path:
