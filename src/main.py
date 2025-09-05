@@ -74,8 +74,8 @@ if __name__ == '__main__':
         '-s', '--silent', action='store_true', help='Suppress all output messages'
     )
     parser.add_argument(
-        '-c', '--claw-config', type=lambda s: file_ext(('py', 'json'), s),
-        help='Path to configuration file (.json or .py)'
+        '-c', '--claw-config', type=lambda s: file_ext(('py', 'json', 'pkl'), s),
+        help='Path to configuration file (.json, .py, or .pkl)'
     )
 
     group_archive = parser.add_mutually_exclusive_group()
@@ -107,9 +107,12 @@ if __name__ == '__main__':
                     print('No failed downloads to retry.')
                     exit(1)
             elif args.claw_config:
-                targets = (DriverClaw.load_json(args.claw_config)
-                           if '.json' in args.claw_config
-                           else DriverClaw.load_py(args.claw_config))
+                if '.json' in args.claw_config:
+                    targets = DriverClaw.load_json(args.claw_config)
+                elif '.pkl' in args.claw_config:
+                    targets = DriverClaw.load_pickle(args.claw_config)
+                else:
+                    targets = DriverClaw.load_py(args.claw_config)
             else:
                 targets = config.CLAW_PRIZES
 

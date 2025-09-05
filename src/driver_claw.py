@@ -83,6 +83,16 @@ class DriverClaw:
         spec.loader.exec_module(custom)
         return custom.CLAW_PRIZES
 
+    @staticmethod
+    def load_pickle(path: str | Path) -> dict[str, list[ClawPrize]]:
+        """Load driver configuration from a pickle file.
+
+        Args:
+            path (str | Path): Path to the pickle file.
+        """
+        with open(path, 'rb') as f:
+            return pickle.load(f)
+
     def __init__(self, destination: str | Path):
         self.dest = Path(destination)
 
